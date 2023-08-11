@@ -1,12 +1,14 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { Stack } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import Sidebar from "./Sidebar";
 
+const isAuth = true;
+
 const DashboardLayout = () => {
-  const theme = useTheme();
-  console.log(theme);
+  if (!isAuth) {
+    return <Navigate to={"/auth/login"} />;
+  }
 
   return (
     <>
