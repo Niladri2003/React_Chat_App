@@ -8,7 +8,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+import { useTheme, alpha } from "@mui/material/styles";
 import {
   DotsThreeCircleVertical,
   DotsThreeVertical,
@@ -26,8 +26,8 @@ const Docmsg = ({ el, menu }) => {
         p={1.5}
         sx={{
           backgroundColor: el.incoming
-            ? theme.palette.background.default
-            : theme.palette.background.main,
+            ? alpha(theme.palette.background.default, 1)
+            : theme.palette.primary.main,
           borderRadius: 1.5,
           width: "max-content",
         }}
@@ -70,8 +70,8 @@ const Linkmsg = ({ el, menu }) => {
         p={1.5}
         sx={{
           backgroundColor: el.incoming
-            ? theme.palette.background.default
-            : theme.palette.background.main,
+            ? alpha(theme.palette.background.default, 1)
+            : theme.palette.primary.main,
           borderRadius: 1.5,
           width: "max-content",
         }}
@@ -102,7 +102,12 @@ const Linkmsg = ({ el, menu }) => {
                 www.youtube.com
               </Typography>
             </Stack>
-            <Typography variant="body2">{el.message}</Typography>
+            <Typography
+              variant="body2"
+              color={el.incoming ? theme.palette.text : "#fff"}
+            >
+              {el.message}
+            </Typography>
           </Stack>
         </Stack>
       </Box>
@@ -119,8 +124,8 @@ const ReplyMSg = ({ el, menu }) => {
         p={1.5}
         sx={{
           backgroundColor: el.incoming
-            ? theme.palette.background.default
-            : theme.palette.background.main,
+            ? alpha(theme.palette.background.paper, 1)
+            : theme.palette.primary.main,
           borderRadius: 1.5,
           width: "max-content",
         }}
@@ -131,7 +136,11 @@ const ReplyMSg = ({ el, menu }) => {
             direction={"column"}
             spacing={3}
             alignItems={"center"}
-            sx={{ backgroundColor: theme.palette.background.paper }}
+            sx={{
+              backgroundColor: alpha(theme.palette.background.paper, 1),
+
+              borderRadius: 1,
+            }}
           >
             <Typography variant="body2" color={theme.palette.text}>
               {el.message}
@@ -185,14 +194,15 @@ const MediaMsg = ({ el, menu }) => {
 
 const TextMsg = ({ el, menu }) => {
   const theme = useTheme();
+  console.log(el.incoming);
   return (
     <Stack direction={"row"} justifyContent={el.incoming ? "start" : "end"}>
       <Box
         p={1.5}
         sx={{
           backgroundColor: el.incoming
-            ? theme.palette.background.default
-            : theme.palette.background.main,
+            ? alpha(theme.palette.background.default, 1)
+            : theme.palette.primary.main,
           borderRadius: 1.5,
           width: "max-content",
         }}

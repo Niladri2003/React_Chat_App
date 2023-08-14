@@ -9,10 +9,17 @@ import {
   TextMsg,
   Timeline,
 } from "./MessageType";
+import { useTheme } from "@mui/material/styles";
 
 const Message = ({ menu }) => {
+  const theme = useTheme();
   return (
-    <Box p={3}>
+    <Box
+      p={3}
+      sx={{
+        backgroundColor: theme.palette.mode === "light" && "#eef5ed",
+      }}
+    >
       <Stack spacing={3}>
         {Chat_History.map((el) => {
           switch (el.type) {

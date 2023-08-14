@@ -123,16 +123,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Chats = () => {
   const theme = useTheme();
+  console.log(theme.palette.mode);
   return (
     <Box
       sx={{
         position: "relative",
 
         width: 320,
-        backgroundColor:
-          theme.palette.mode === "light"
-            ? "#F8FAFF"
-            : theme.palette.background.paper,
+        backgroundColor: theme.palette.mode === "light" ? "#F8FAFF" : "#010201",
         boxShadow: "0px 0px 2px rgba(0,0,0,0.25)",
       }}
     >
