@@ -1,6 +1,6 @@
 import React from "react";
 import Chats from "./Chats";
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Conversation from "../../components/Conversation";
 import Contact from "../../components/Contact";
@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import SharedMessages from "../../components/SharedMessages";
 import SarredMessages from "../../components/SarredMessages";
 const GeneralApp = () => {
-  const { sidebar } = useSelector((store) => store.app);
+  const { sidebar, chat_type, room_id } = useSelector((store) => store.app);
 
   const theme = useTheme();
   return (
@@ -25,8 +25,21 @@ const GeneralApp = () => {
               : theme.palette.background.default,
         }}
       >
+        {room_id !== null && chat_type === "individual" ? (
+          <Conversation />
+        ) : (
+          <Stack
+            spacing={2}
+            sx={{ height: "100%", width: "100%" }}
+            alignItems={"center"}
+            justifyContent={"center"}
+          >
+            <Typography variant="subtitle2">
+              Select a coversation or start a new one
+            </Typography>
+          </Stack>
+        )}
         {/* Conversation */}
-        <Conversation />
       </Box>
       {/* Contact */}
       {sidebar.open &&

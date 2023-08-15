@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../utils/axios";
 import axios from "axios";
+import { showSnackbar } from "./app";
 
 const initialState = {
   isLoggedin: false,
@@ -59,9 +60,14 @@ export function LoginUser(formValues) {
             token: response.data.token,
           })
         );
+        window.localStorage.setItem("user_id", response.data.user_id);
+        dispatch(
+          showSnackbar({ severity: "success", message: response.data.message })
+        );
       })
       .catch(function (error) {
         console.log(error);
+        dispatch(showSnackbar({ severity: "error", message: "Login failed" }));
       });
   };
 }
@@ -69,6 +75,7 @@ export function LoginUser(formValues) {
 //Log out
 export function LogoutUser() {
   return async (dispatch, getState) => {
+    window.localStorage.removeItemItem("user_id");
     dispatch(slice.actions.signOut());
   };
 }
@@ -192,6 +199,7 @@ export function VerifyEmail(formValues) {
             token: response.data.token,
           })
         );
+        window.localStorage.setItem("user_id", response.data.user_id);
       })
       .catch((error) => {
         console.log(error);

@@ -9,12 +9,21 @@ import {
   Avatar,
   Badge,
 } from "@mui/material";
-import { ArchiveBox, CircleDashed, MagnifyingGlass } from "phosphor-react";
+import {
+  ArchiveBox,
+  CircleDashed,
+  MagnifyingGlass,
+  Users,
+} from "phosphor-react";
 import { styled, alpha, useTheme } from "@mui/material/styles";
 import React from "react";
 import { faker } from "@faker-js/faker";
 import { ChatList } from "../../data";
 import { SimpleBarStyle } from "../../components/Scrollbar";
+import { useState } from "react";
+import Friends from "../../sections/main/Friends";
+import { useDispatch } from "react-redux";
+import { selectConversation } from "../../redux/slices/app";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -46,9 +55,13 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 const ChatElement = ({ id, name, img, msg, time, unread, online }) => {
+  const dispatch = useDispatch();
   const theme = useTheme();
   return (
     <Box
+      onClick={() => {
+        dispatch(selectConversation({ room_id }));
+      }}
       sx={{
         width: "100%",
         borderRadius: 1,
@@ -122,71 +135,88 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Chats = () => {
+  const [OpenDialog, setOpenDialog] = useState(false);
   const theme = useTheme();
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
   console.log(theme.palette.mode);
   return (
-    <Box
-      sx={{
-        position: "relative",
+    <>
+      <Box
+        sx={{
+          position: "relative",
 
-        width: 320,
-        backgroundColor: theme.palette.mode === "light" ? "#F8FAFF" : "#010201",
-        boxShadow: "0px 0px 2px rgba(0,0,0,0.25)",
-      }}
-    >
-      <Stack p={3} spacing={2} sx={{ maxHeight: "100vh" }}>
-        <Stack
-          direction={"row"}
-          alignItems={"center"}
-          justifyContent={"space-between"}
-        >
-          <Typography variant="h5">Chats</Typography>
-          <IconButton>
-            <CircleDashed />
-          </IconButton>
-        </Stack>
-
-        <Stack sx={{ width: "100%" }}>
-          <Search>
-            <SearchIconWrapper>
-              <MagnifyingGlass color="#709ce6" />
-            </SearchIconWrapper>
-            <StyledInputBase placeholder="Search.." />
-          </Search>
-        </Stack>
-        <Stack spacing={1}>
-          <Stack direction={"row"} alignItems={"center"} spacing={1.5}>
-            <ArchiveBox size={24} />
-            <Button>Archive</Button>
+          width: 320,
+          backgroundColor:
+            theme.palette.mode === "light" ? "#F8FAFF" : "#010201",
+          boxShadow: "0px 0px 2px rgba(0,0,0,0.25)",
+        }}
+      >
+        <Stack p={3} spacing={2} sx={{ maxHeight: "100vh" }}>
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            justifyContent={"space-between"}
+          >
+            <Typography variant="h5">Chats</Typography>
+            <IconButton
+              onClick={() => {
+                handleOpenDialog();
+              }}
+            >
+              <Users />
+            </IconButton>
           </Stack>
-          <Divider />
-        </Stack>
-        <Stack
-          spacing={2}
-          direction={"column"}
-          sx={{ flexGrow: 1, height: "100%", overflowY: "auto" }}
-        >
-          <SimpleBarStyle timeout={500} clickOnTrack={false}>
-            <Stack spacing={2.4}>
-              <Typography variant="subtitle2" sx={{ color: "#676767" }}>
-                Pinned
-              </Typography>
-              {ChatList.filter((el) => el.pinned).map((el) => {
-                return <ChatElement {...el} />;
-              })}
+
+          <Stack sx={{ width: "100%" }}>
+            <Search>
+              <SearchIconWrapper>
+                <MagnifyingGlass color="#709ce6" />
+              </SearchIconWrapper>
+              <StyledInputBase placeholder="Search.." />
+            </Search>
+          </Stack>
+          <Stack spacing={1}>
+            <Stack direction={"row"} alignItems={"center"} spacing={1.5}>
+              <ArchiveBox size={24} />
+              <Button>Archive</Button>
             </Stack>
-            <Stack spacing={2.4}>
-              <Typography variant="subtitle2" sx={{ color: "#676767" }}>
-                All chats
-              </Typography>
-              {ChatList.filter((el) => !el.pinned).map((el) => {
-                return <ChatElement {...el} />;
-              })}
-            </Stack>
-          </SimpleBarStyle>
+            <Divider />
+          </Stack>
+          <Stack
+            spacing={2}
+            direction={"column"}
+            sx={{ flexGrow: 1, height: "100%", overflowY: "auto" }}
+          >
+            <SimpleBarStyle timeout={500} clickOnTrack={false}>
+              <Stack spacing={2.4}>
+                <Typography variant="subtitle2" sx={{ color: "#676767" }}>
+                  Pinned
+                </Typography>
+                {ChatList.filter((el) => el.pinned).map((el) => {
+                  return <ChatElement {...el} />;
+                })}
+              </Stack>
+              <Stack spacing={2.4}>
+                <Typography variant="subtitle2" sx={{ color: "#676767" }}>
+                  All chats
+                </Typography>
+                {ChatList.filter((el) => !el.pinned).map((el) => {
+                  return <ChatElement {...el} />;
+                })}
+              </Stack>
+            </SimpleBarStyle>
+          </Stack>
         </Stack>
-      </Stack>
-    </Box>
+      </Box>
+      {OpenDialog && (
+        <Friends open={OpenDialog} handleClose={handleCloseDialog} />
+      )}
+    </>
   );
 };
 
